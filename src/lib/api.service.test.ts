@@ -241,6 +241,43 @@ describe('API Service - Autenticación', () => {
   });
 
   // ==========================================
+  // GRUPO: Favoritos
+  // ==========================================
+  describe('Favoritos', () => {
+    it('debería alternar favorito de película correctamente (PATCH)', async () => {
+      // ARRANGE
+      const token = 'valid-token';
+      authToken.set(token);
+      const movieId = 'movie-123';
+      const mockMovie = { id: movieId, title: 'Inception', isFavorite: true };
+
+      // Mock de respuesta exitosa
+      (globalThis.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        headers: {
+          get: (name: string) => name === 'content-type' ? 'application/json' : null
+        },
+        json: async () => mockMovie
+      });
+
+      // ACT
+      const response = await api.toggleFavorite(movieId);
+
+      // ASSERT
+      expect(response).toEqual(mockMovie);
+      expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+      
+      const callArgs = (globalThis.fetch as any).mock.calls[0];
+      expect(callArgs[0]).toBe(`http://localhost:3000/api/movies/${movieId}/favorite`);
+      expect(callArgs[1].method).toBe('PATCH');
+      
+      const headers = callArgs[1].headers as Headers;
+      expect(headers.get('Authorization')).toBe(`Bearer ${token}`);
+    });
+  });
+
+  // ==========================================
   // GRUPO: Manejo de errores HTTP
   // ==========================================
   describe('Manejo de errores', () => {
