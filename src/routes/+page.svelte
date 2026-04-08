@@ -86,17 +86,6 @@
     }
   }
 
-  // Actualiza rating de película a través del store
-  async function handleRate(id: string, rating: number) {
-    feedbackMessage = null;
-    moviesStore.clearError();
-
-    const ok = await moviesStore.rateMovie(id, rating);
-    if (ok) {
-      feedbackMessage = { type: 'info', text: 'Rating actualizado.' };
-    }
-  }
-
   // Abre el modo edición con los datos de la tarjeta seleccionada.
   function handleEdit(movie: Movie) {
     editingMovie = movie;
@@ -141,7 +130,7 @@
       {:else}
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {#each moviesStore.movies as movie (movie.id)}
-            <MovieCard {movie} ondelete={handleDelete} onedit={handleEdit} ontogglefavorite={handleToggleFavorite} onrate={handleRate} />
+            <MovieCard {movie} ondelete={handleDelete} onedit={handleEdit} ontogglefavorite={handleToggleFavorite} />
           {/each}
         </div>
       {/if}

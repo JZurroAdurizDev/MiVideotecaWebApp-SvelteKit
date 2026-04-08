@@ -127,5 +127,5 @@ export const api = {
   deleteMovie: (id: string) => request<void>(`/api/movies/${id}`, { method: 'DELETE' }),
 
   toggleFavorite: (id: string) => request<Movie>(`/api/movies/${id}/favorite`, { method: 'PATCH' }),
-  rateMovie: (id: string, rating: number) => request<Movie>(`/api/movies/${id}/rating`, { method: 'PATCH', body: { rating } }),
+  // TODO (UD4 - Ejercicio): rateMovie
 };
