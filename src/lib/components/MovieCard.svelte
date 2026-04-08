@@ -6,12 +6,14 @@
     movie,
     showActions = true,
     ondelete,
-    onedit
+    onedit,
+    ontogglefavorite
   }: {
     movie: Movie;
     showActions?: boolean;
     ondelete?: (id: string) => void;
     onedit?: (movie: Movie) => void;
+    ontogglefavorite?: (id: string) => void;
   } = $props();
 
   // Handlers: ejecutan callbacks del padre directamente
@@ -21,6 +23,10 @@
 
   function handleEdit() {
     onedit?.(movie);
+  }
+
+  function handleToggleFavorite() {
+    ontogglefavorite?.(movie.id);
   }
 </script>
 
@@ -38,9 +44,21 @@
   {/if}
 
   <div class="flex flex-1 flex-col gap-3 p-4">
-    <header>
-      <h3 class="text-lg font-semibold text-slate-900">{movie.title}</h3>
-      <p class="text-sm text-slate-600">Dirigida por {movie.director}</p>
+    <header class="flex items-start justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-slate-900">{movie.title}</h3>
+        <p class="text-sm text-slate-600">Dirigida por {movie.director}</p>
+      </div>
+      {#if showActions}
+        <button
+          type="button"
+          class="text-2xl transition hover:scale-110"
+          title={movie.isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+          onclick={handleToggleFavorite}
+        >
+          {movie.isFavorite ? '❤️' : '🤍'}
+        </button>
+      {/if}
     </header>
 
     <div class="mt-auto text-sm text-slate-500">
